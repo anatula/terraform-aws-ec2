@@ -18,6 +18,10 @@ We have the VPC & subnet inside. Now, we're connecting VPC to Internet Gateway a
 RouteTable = virtual router
 Internet Gateway = virtual modem connecting to internet
 
+5. create an explicit subnet association with our Route Table
+
+All the resources that will be deployed into our subnet, EC2, etc all this requests will be handled by this route table (we will be able to ssh into the EC2 instance, access nginx server through the browser)
+
 - provision EC2 instance
 - deploy nginx docker container
 - create security group (firewall)

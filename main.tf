@@ -34,11 +34,17 @@ resource "aws_internet_gateway" "myapp-igw" {
 # create Route Table
 resource "aws_route_table" "myapp-route-table" {
   vpc_id = aws_vpc.myapp-vpc.id
-  route {
+    route {
       cidr_block = "0.0.0.0/0" # any ip address
       gateway_id = aws_internet_gateway.myapp-igw.id
   }
     tags = {
       Name: "${var.env_prefix}-rtb"
     }
+}
+
+# explicit subnet association with our Route Table
+resource "aws_route_table_association" "myapp-assoc-rtb-subnet" {
+  subnet_id = aws_subnet.myapp-subnet-1.id
+  route_table_id = aws_route_table.myapp-route-table.id
 }
