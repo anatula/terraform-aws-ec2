@@ -26,6 +26,11 @@ All the resources that will be deployed into our subnet, EC2, etc all this reque
 
 Remove the created table. Just use the main and add a new route to the default route table.
 
+7. Configure firewall rules for our EC2 instance: security group
+
+- open port 22 (ssh)
+- open port 8080 (nginx access from browser)
+
 - provision EC2 instance
 - deploy nginx docker container
 - create security group (firewall)
