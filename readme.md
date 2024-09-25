@@ -11,7 +11,13 @@ avail_zone = "eu-central-1b"
 env_prefix = "dev"
 ```
 
-- create Route Table and Internet Gateway
+4. create Route Table and Internet Gateway
+
+We have the VPC & subnet inside. Now, we're connecting VPC to Internet Gateway and we're configuring a new Route Table that we are creating in the VPC to route all the traffic to and from Internet using an Internet Gateway.
+
+RouteTable = virtual router
+Internet Gateway = virtual modem connecting to internet
+
 - provision EC2 instance
 - deploy nginx docker container
 - create security group (firewall)
