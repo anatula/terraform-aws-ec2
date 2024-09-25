@@ -22,6 +22,10 @@ Internet Gateway = virtual modem connecting to internet
 
 All the resources that will be deployed into our subnet, EC2, etc all this requests will be handled by this route table (we will be able to ssh into the EC2 instance, access nginx server through the browser)
 
+6. Use the default main route table created by AWS
+
+Remove the created table. Just use the main and add a new route to the default route table.
+
 - provision EC2 instance
 - deploy nginx docker container
 - create security group (firewall)
