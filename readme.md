@@ -47,4 +47,4 @@ NOTE: Remember that on recreation the public ip will also change
 
 Check using the public ip of the ec2 instance on port 8080, should see the nginx welcome screen
 
-- create security group (firewall)
+12. create an `entry-script.sh` file for `user_data` to read from.
