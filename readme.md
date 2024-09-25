@@ -33,6 +33,12 @@ Remove the created table. Just use the main and add a new route to the default r
 
 8. Use default security group
 
-- provision EC2 instance
+9. create key pair to access with ssh
+   In local machine: `ssh-keygen -t ed25519 -f ~/.ssh/aws_ec2_terraform -C "for aws ec2 terraform"`
+   Files will be in `~/.ssh`
+   Note the public ip to connect: `ssh -i ~/.ssh/PRIVATE_KEY ec2-user@PUBLIC_IP`
+
+10. provision EC2 instance
+
 - deploy nginx docker container
 - create security group (firewall)

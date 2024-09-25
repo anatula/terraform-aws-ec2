@@ -5,6 +5,8 @@ variable "subnet_cidr_block" {}
 variable "avail_zone" {}
 variable "env_prefix" {}
 variable "sg_ip_ingress_cidr_block" {}
+variable "instance_type" {}
+variable "ssh_public_key_location" {}
 
 # create custom VPC
 resource "aws_vpc" "myapp-vpc" {
@@ -71,5 +73,42 @@ resource "aws_default_security_group" "myapp-default-sg" {
 
   tags = {
     Name: "${var.env_prefix}-sg"
+  }
+}
+
+data "aws_ami" "latest-amazon-linux-image" {
+  most_recent = true
+  owners = ["amazon"]
+  filter {
+    name = "name"
+    values = ["amzn2-ami-kernel-*-x86_64-gp2"]
+  }
+  filter {
+    name = "virtualization-type"
+    values = ["hvm"]
+  }
+}
+
+output "aws_ami_id" {
+  value= data.aws_ami.latest-amazon-linux-image
+}
+
+resource "aws_key_pair" "myapp-ssh-key" {
+  key_name = "server-key"
+  public_key = file(var.ssh_public_key_location)
+}
+
+resource "aws_instance" "myapp-server" {
+  ami = data.aws_ami.latest-amazon-linux-image.id
+  instance_type = var.instance_type
+  subnet_id = aws_subnet.myapp-subnet-1.id
+  vpc_security_group_ids = [aws_default_security_group.myapp-default-sg.id]
+  availability_zone = var.avail_zone
+  # to access this from browser and ssh need a public ip
+  associate_public_ip_address = true
+  # keys
+  key_name = aws_key_pair.myapp-ssh-key.key_name
+  tags = {
+    Name: "${var.env_prefix}-server"
   }
 }
