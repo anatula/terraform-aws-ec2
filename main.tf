@@ -44,8 +44,7 @@ resource "aws_default_route_table" "myapp-main-default-route-table" {
 }
 
 # create security group
-resource "aws_security_group" "myapp-sg" {
-  name = "myapp-sg"
+resource "aws_default_security_group" "myapp-default-sg" {
   vpc_id = aws_vpc.myapp-vpc.id # associate vpc with sg 
   # incoming traffic
   ingress {

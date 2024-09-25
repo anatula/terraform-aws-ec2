@@ -31,6 +31,8 @@ Remove the created table. Just use the main and add a new route to the default r
 - open port 22 (ssh)
 - open port 8080 (nginx access from browser)
 
+8. Use default security group
+
 - provision EC2 instance
 - deploy nginx docker container
 - create security group (firewall)
