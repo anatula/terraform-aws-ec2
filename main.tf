@@ -111,4 +111,14 @@ resource "aws_instance" "myapp-server" {
   tags = {
     Name: "${var.env_prefix}-server"
   }
+  # entry-point script that gets executed when ec2 instance whenever the server is instanciated
+  user_data = <<EOF
+    #!/bin/bash
+    sudo yum update -y && sudo yum install -y docker
+    sudo systemctl start docker
+    sudo usermod -aG docker ec2-user
+    docker run -p 8080:80 nginx
+  EOF
+
+  user_data_replace_on_change = true
 }

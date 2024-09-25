@@ -39,6 +39,12 @@ Remove the created table. Just use the main and add a new route to the default r
    Note the public ip to connect: `ssh -i ~/.ssh/PRIVATE_KEY ec2-user@PUBLIC_IP`
 
 10. provision EC2 instance
+    A `user_data` change will force the recreation of the instance with `user_data_replace_on_change = true`
 
-- deploy nginx docker container
+NOTE: Remember that on recreation the public ip will also change
+
+11. deploy nginx docker container
+
+Check using the public ip of the ec2 instance on port 8080, should see the nginx welcome screen
+
 - create security group (firewall)
