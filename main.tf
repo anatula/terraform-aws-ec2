@@ -2,6 +2,7 @@ provider "aws" { }
 
 # create custom VPC
 resource "aws_vpc" "myapp-vpc" {
+  enable_dns_hostnames = true
   cidr_block = var.vpc_cidr_block
   tags = {
     Name: "${var.env_prefix}-vpc"
@@ -27,4 +28,15 @@ module "myapp-server" {
   instance_type = var.instance_type
   subnet_id = module.myapp-subnet.subnet.id
   avail_zone = var.avail_zone
+}
+
+resource "ansible_host" "myapp-server" {
+  name   = module.myapp-server.ec2_public_dns
+  groups = ["ansible_client"]
+  variables = {
+    ansible_user                 = "ec2-user",
+    ansible_ssh_private_key_file = "~/.ssh/aws_ec2_terraform",
+    prefix                       = "${var.env_prefix}-server"
+  }
+  depends_on = [module.myapp-server]
 }

@@ -1,6 +1,15 @@
 This code uses terraform tp provide an AWS ec2 instance that will launch an an nginx server.
 This code creates a VPC, uses modules to create a subnet and a webserver.
-To launch it, the ec2's instance has thr `user_data` field with a script that will gets executed when the ec2 is instanciated.
+~~To launch it, the ec2's instance has the `user_data` field with a script that will gets executed when the ec2 is instanciated.~~
+
+We're now integrating with Ansible to install and configure our app.
+Check out the Ansible provider page to see some [example usage](https://registry.terraform.io/providers/ansible/ansible/latest/docs).
+
+[Installation](https://github.com/ansible-collections/cloud.terraform?tab=readme-ov-file#installation) of the cloud.terraform collection with the Ansible Galaxy CLI:
+
+`ansible-galaxy collection install cloud.terraform`
+
+Another change is that in the webserver module I fetch our current IP from a remote IP service (https://ipv4.icanhazip.com), ⚠️ make sure to trust the website who will return this ip ⚠️
 
 Steps to run:
 
@@ -20,7 +29,7 @@ vpc_cidr_block = "10.0.0.0/16"
 subnet_cidr_block = "10.0.10.0/24"
 avail_zone = "eu-central-1b"
 env_prefix = "dev"
-sg_ip_ingress_cidr_block="91.170.196.211/32"
+sg_ip_ingress_cidr_block="91.170.196.211/32" # <--your computer's ip
 instance_type="t2.micro"
 ssh_public_key_location="~/.ssh/aws_ec2_terraform.pub"
 image_name = "al2023-ami-*-x86_64"
@@ -28,14 +37,18 @@ image_name = "al2023-ami-*-x86_64"
 
 5. Do `terraform init`
 6. Do `terraform apply`
-7. Copy the output of `ec2-public-ip` add port `8080` and you should see the nginx welcome page in your browser.
-8. To delete all the resources `terraform destroy`
+7. Check the ansible inventory file (it should list the just created ec2 instance)
+   `ansible-inventory -i inventory.yml --graph --vars`
+8. Run the ansible playbook
+   `ansible-playbook -i inventory.yml install_docker_nginx.yml`
+9. To delete all the resources `terraform destroy`
+10. Copy the output of `ec2-public-ip` or `ec2-public-dns` add port `8080` and you should see the nginx welcome page in your browser.
 
 The "generic" steps terraform will perform:
 
-9. create custom VPC
-10. create custom Subnet
-11. create Route Table and Internet Gateway
+1. create custom VPC
+2. create custom Subnet
+3. create Route Table and Internet Gateway
 
 We have the VPC & subnet inside. Now, we're connecting VPC to Internet Gateway and we're configuring a new Route Table that we are creating in the VPC to route all the traffic to and from Internet using an Internet Gateway.
 

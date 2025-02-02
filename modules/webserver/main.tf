@@ -1,3 +1,7 @@
+# retrieve our public ip 
+data "http" "myip" {
+  url = "https://ipv4.icanhazip.com"
+}
 # create security group
 resource "aws_default_security_group" "myapp-default-sg" {
   vpc_id = var.vpc_id # associate vpc with sg 
@@ -6,7 +10,9 @@ resource "aws_default_security_group" "myapp-default-sg" {
     from_port = 22
     to_port = 22
     protocol = "TCP"
-    cidr_blocks = [var.sg_ip_ingress_cidr_block]
+    # cidr_blocks = [var.sg_ip_ingress_cidr_block]
+    # chomp() method to remove any trailing space or new line which comes with body
+    cidr_blocks = ["${chomp(data.http.myip.response_body)}/32"]
   }
 
   ingress {
@@ -61,7 +67,6 @@ resource "aws_instance" "myapp-server" {
     Name: "${var.env_prefix}-server"
   }
   # entry-point script that gets executed when ec2 instance whenever the server is instanciated
-  user_data = file("${path.module}/entry-script.sh")
-
-  user_data_replace_on_change = true
+  #user_data = file("${path.module}/entry-script.sh")
+  #user_data_replace_on_change = true
 }
