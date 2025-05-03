@@ -65,10 +65,10 @@ All the resources that will be deployed into our subnet, EC2, etc all this reque
 - open port 22 (ssh)
 - open port 8080 (nginx access from browser)
 
-1.  Use default security group
-2.  Provision EC2 instance
-3.  Deploy nginx docker container
-4.  Check, using the public IP of the ec2 instance on port 8080, should see the nginx welcome screen
+7.  Use default security group
+8.  Provision EC2 instance
+9.  Deploy nginx docker container
+10. Check, using the public IP of the ec2 instance on port 8080, should see the nginx welcome screen
 
 Note:
 A `user_data` change will force the recreation of the instance with `user_data_replace_on_change = true`
